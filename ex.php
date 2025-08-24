@@ -58,28 +58,32 @@
 </head>
 <body>
     
+<h1 class="text-center my-4">Lista Hotel</h1>
 
-<h1>hotels</h1>
-
-<div class="container d-flex text-center">
-  <div class="row">
-    <div class="col">
-      Nome
-    </div>
-        <div class="col">
-        Descrizione
-    </div>
-        <div class="col">
-        Parcheggio
-    </div>
-    <div class="col">
-      Voto
-    </div>
-    <div class="col">
-      Distanza 
+<div class="container text-center">
+  <!-- Intestazione -->
+  <div class="row fw-bold border-bottom pb-2 mb-2">
+    <div class="col">Nome</div>
+    <div class="col">Descrizione</div>
+    <div class="col">Parcheggio</div>
+    <div class="col">Voto</div>
+    <div class="col">Distanza</div>
   </div>
-</div>
- 
+
+<?php
+
+// istruzioni che iterano su ogni hotel
+foreach ($hotels as $hotel)
+
+
+?>
+    <div class="row border-bottom py-2">
+      <div class="col"><?= $hotel['name'] ?></div>
+      <div class="col"><?= $hotel['description'] ?></div>
+      <div class="col"><?= $hotel['parking'] ? 'Sì' : 'No' ?></div>
+      <div class="col"><?= $hotel['vote'] ?></div>
+      <div class="col"><?= $hotel['distance_to_center'] ?> km</div>
+    </div>
 
 
 </body>
