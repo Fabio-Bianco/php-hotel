@@ -70,20 +70,16 @@
     <div class="col">Distanza</div>
   </div>
 
-<?php
-
-// istruzioni che iterano su ogni hotel
-foreach ($hotels as $hotel)
-
-
-?>
-    <div class="row border-bottom py-2">
-      <div class="col"><?= $hotel['name'] ?></div>
-      <div class="col"><?= $hotel['description'] ?></div>
-      <div class="col"><?= $hotel['parking'] ? 'Sì' : 'No' ?></div>
-      <div class="col"><?= $hotel['vote'] ?></div>
-      <div class="col"><?= $hotel['distance_to_center'] ?> km</div>
-    </div>
+    <!-- Dati degli hotel -->
+<?php foreach ($hotels as $hotel): ?>
+  <div class="row border-bottom py-2">
+    <div class="col"><?= htmlspecialchars($hotel['name']) ?></div>
+    <div class="col"><?= htmlspecialchars($hotel['description']) ?></div>
+    <div class="col"><?= $hotel['parking'] ? 'Sì' : 'No' ?></div>
+    <div class="col"><?= (int)$hotel['vote'] ?></div>
+    <div class="col"><?= number_format($hotel['distance_to_center'], 1, ',', '.') ?> km</div>
+  </div>
+<?php endforeach; ?>
 
 
 </body>
