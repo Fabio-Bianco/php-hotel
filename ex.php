@@ -71,7 +71,7 @@
   </div>
 
     <!-- Dati degli hotel -->
-<?php foreach ($hotels as $hotel): ?>
+<?php foreach ($hotels as $hotel) { ?>
   <div class="row border-bottom py-2">
     <div class="col"><?= htmlspecialchars($hotel['name']) ?></div>
     <div class="col"><?= htmlspecialchars($hotel['description']) ?></div>
@@ -79,7 +79,8 @@
     <div class="col"><?= (int)$hotel['vote'] ?></div>
     <div class="col"><?= number_format($hotel['distance_to_center'], 1, ',', '.') ?> km</div>
   </div>
-<?php endforeach; ?>
+<?php } ?>
+
 
 
 </body>
