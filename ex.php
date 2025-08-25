@@ -41,8 +41,8 @@ $hotels = [
 ];
 
 
-if($_GET['parking'] == 'on'){
-    echo 'funziona';
+if(isset($_GET['parking']) && $_GET['parking'] == 'on'){
+    echo 'parcheggi richiesti';
     
     };
 
