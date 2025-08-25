@@ -66,15 +66,25 @@ if(isset($_GET['parking']) && $_GET['parking'] == 'on'){
     <div class="container-fluid">
         <h1 class="text-center my-4">Lista Hotel</h1>
         <hr>
-        <h2>filtri</h2>
+        
         <form action="">
+            <div class="d-flex mb-4">
+            <div class="form-control">
+             <input type="checkbox" name="parking" id="parking">
+             <label for="parking">Presenza parcheggio</label>
+            </div>
 
-            <input type="checkbox" name="parking" id="parking">
-            <label for="parking">Presenza parcheggio</label>
+            <div class="form-control">
+                <inmput type="number" name="vote" id="vote" min="1" max="5" step="1">
+                <label for="vote">Voto minimo</label>
+            </div>
+
             <button type="submit" class="btn btn-primary btn-sm mx-2">filtra
             </button>
+            </div>
 
         </form>
+
         <hr class="mb-4">
     </div>
 
@@ -88,10 +98,11 @@ if(isset($_GET['parking']) && $_GET['parking'] == 'on'){
             <div class="col">Distanza</div>
         </div>
 
-        <!-- Dati degli hotel -->
+        <!-- Iterazione dati degli hotel -->
         <?php foreach ($hotels as $hotel) { 
             
         if($parking_requested && !$hotel['parking']){
+           
             continue;
         }   
         
