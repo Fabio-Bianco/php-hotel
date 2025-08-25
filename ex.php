@@ -40,14 +40,33 @@ $hotels = [
 
 ];
 
+// controllo se è stato richiesto il filtro per il parcheggio
+
 $parking_requested = false;
 
-if(isset($_GET['parking']) && $_GET['parking'] == 'on'){
+if (isset($_GET['parking']) && $_GET['parking'] == 'on') {
     $parking_requested = true;
-    
-    };
 
-    
+}
+;
+
+// controllo se è stato richiesto il filtro per il voto minimo
+
+$minimum_vote = 0;
+
+if (
+    isset($_GET['minimum_vote'])
+    && is_numeric($_GET['minimum_vote'])
+    && is_numeric($_GET['minimum_vote'])
+    && $_GET['minimum_vote'] >= 1
+    && $_GET['minimum_vote'] <= 5
+) {
+    $minimum_vote = (int) $_GET['minimum_vote'];
+} else {
+    $minimum_vote = 1; // Valore predefinito se non è stato specificato
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -66,23 +85,23 @@ if(isset($_GET['parking']) && $_GET['parking'] == 'on'){
     <div class="container-fluid">
         <h1 class="text-center my-4">Lista Hotel</h1>
         <hr>
-        
+
         <form action="">
             <div class="d-flex mb-4">
-            <div class="form-control">
-             <input type="checkbox" name="parking" id="parking">
-             <label for="parking">Presenza parcheggio</label>
-            </div>
+                <div class="form-control">
+                    <input type="checkbox" name="parking" id="parking">
+                    <label for="parking">Presenza parcheggio</label>
+                </div>
 
-            <div class="form-control">
-                <inmput type="number" name="vote" id="vote" min="1" max="5" step="1">
-                <label for="vote">Voto minimo</label>
-            </div>
+                <div class="form-control">
+                    <input name="minimum_vote" id="minimum_vote" type="number" min="1" max="5" step="1">
+                    <label for="minimum_vote">Voto minimo</label>
+                </div>
 
+
+            </div>
             <button type="submit" class="btn btn-primary btn-sm mx-2">filtra
             </button>
-            </div>
-
         </form>
 
         <hr class="mb-4">
@@ -99,14 +118,14 @@ if(isset($_GET['parking']) && $_GET['parking'] == 'on'){
         </div>
 
         <!-- Iterazione dati degli hotel -->
-        <?php foreach ($hotels as $hotel) { 
-            
-        if($parking_requested && !$hotel['parking']){
-           
-            continue;
-        }   
-        
-        ?>
+        <?php foreach ($hotels as $hotel) {
+
+            if ($parking_requested && !$hotel['parking']) {
+
+                continue;
+            }
+
+            ?>
 
             <div class="row border-bottom py-2">
                 <div class="col"><?php echo $hotel['name']; ?></div>
