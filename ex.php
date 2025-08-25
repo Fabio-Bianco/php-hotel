@@ -40,12 +40,14 @@ $hotels = [
 
 ];
 
+$parking_requested = false;
 
 if(isset($_GET['parking']) && $_GET['parking'] == 'on'){
-    echo 'parcheggi richiesti';
+    $parking_requested = true;
     
     };
 
+    
 ?>
 
 <!DOCTYPE html>
@@ -87,7 +89,14 @@ if(isset($_GET['parking']) && $_GET['parking'] == 'on'){
         </div>
 
         <!-- Dati degli hotel -->
-        <?php foreach ($hotels as $hotel) { ?>
+        <?php foreach ($hotels as $hotel) { 
+            
+        if($parking_requested && !$hotel['parking']){
+            continue;
+        }   
+        
+        ?>
+
             <div class="row border-bottom py-2">
                 <div class="col"><?php echo $hotel['name']; ?></div>
                 <div class="col"><?php echo str_replace('Descrizione', '', $hotel['description']); ?></div>
