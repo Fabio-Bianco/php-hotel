@@ -66,7 +66,6 @@ if (
     $minimum_vote = 1; // Valore predefinito se non è stato specificato
 }
 
-
 ?>
 
 <!DOCTYPE html>
@@ -121,10 +120,12 @@ if (
         <?php foreach ($hotels as $hotel) {
 
             if ($parking_requested && !$hotel['parking']) {
-
                 continue;
             }
 
+            if ($hotel['vote'] < $minimum_vote) {
+                continue;
+            }
             ?>
 
             <div class="row border-bottom py-2">
