@@ -3,14 +3,18 @@
    ============================================= */
 
 :root {
+  /* LIGHT MODE COLORS */
   --primary: #1a1a1a;
   --secondary: #666666;
   --accent: #007fad;
+  --accent-light: #0ea5e9;
   --success: #00a680;
   --danger: #d63384;
+  --warning: #f59e0b;
   
   --bg-primary: #ffffff;
   --bg-secondary: #f7f9fc;
+  --bg-tertiary: #f1f5f9;
   --border: #dee2e6;
   --border-light: #f1f3f5;
   
@@ -19,8 +23,37 @@
   --text-muted: #adb5bd;
   
   --radius: 8px;
+  --radius-lg: 16px;
   --shadow: 0 2px 4px rgba(0,0,0,0.04);
   --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 10px 25px rgba(0,0,0,0.12);
+  
+  /* TRANSITIONS */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* DARK MODE COLORS */
+[data-theme="dark"] {
+  --primary: #ffffff;
+  --secondary: #a1a1aa;
+  --accent: #0ea5e9;
+  --accent-light: #38bdf8;
+  
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --border: #334155;
+  --border-light: #475569;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  
+  --shadow: 0 2px 4px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+  --shadow-lg: 0 10px 25px rgba(0,0,0,0.5);
 }
 
 * {
@@ -46,13 +79,14 @@ body {
   padding: 0.25rem 20px;
 }
 
-/* HEADER MODERNO E PROFESSIONALE */
+/* HEADER MODERNO CON DARK MODE */
 header {
-  background: linear-gradient(135deg, var(--bg-primary) 0%, #f8fafc 100%);
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-tertiary) 100%);
   border-bottom: 1px solid var(--border-light);
   padding: 1rem 0;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-md);
   position: relative;
+  transition: all var(--transition-normal);
 }
 
 header::after {
@@ -63,11 +97,19 @@ header::after {
   transform: translateX(-50%);
   width: 60px;
   height: 3px;
-  background: linear-gradient(90deg, var(--accent), #00a680);
+  background: linear-gradient(90deg, var(--accent), var(--success));
   border-radius: 2px;
+  transition: all var(--transition-normal);
 }
 
-header h1 {
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.header-text h1 {
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--text-primary);
@@ -78,15 +120,78 @@ header h1 {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  transition: all var(--transition-normal);
 }
 
-header .subtitle {
+.header-text .subtitle {
   color: var(--text-secondary);
   font-size: 0.95rem;
   font-weight: 400;
   margin: 0;
   line-height: 1.3;
   opacity: 0.9;
+  transition: all var(--transition-normal);
+}
+
+/* THEME TOGGLE BUTTON */
+.theme-toggle {
+  position: relative;
+  width: 60px;
+  height: 32px;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  overflow: hidden;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-md);
+}
+
+.theme-icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  transition: all var(--transition-normal);
+}
+
+.sun-icon {
+  left: 6px;
+  opacity: 1;
+}
+
+.moon-icon {
+  right: 6px;
+  opacity: 0;
+}
+
+[data-theme="dark"] .sun-icon {
+  opacity: 0;
+}
+
+[data-theme="dark"] .moon-icon {
+  opacity: 1;
+}
+
+.theme-toggle::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 24px;
+  height: 24px;
+  background: var(--accent);
+  border-radius: 50%;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow);
+}
+
+[data-theme="dark"] .theme-toggle::before {
+  transform: translateX(28px);
 }
 
 /* =============================================
@@ -199,11 +304,97 @@ header .subtitle {
 }
 
 /* =============================================
+   LOADING & ANIMATIONS
+   ============================================= */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  z-index: 9999;
+  transition: all var(--transition-slow);
+}
+
+.loading-overlay.fade-out {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border);
+  border-top: 3px solid var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+/* CARD ANIMATIONS */
+.hotel-card {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all var(--transition-slow);
+}
+
+.hotel-card.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hotel-card.card-hover {
+  animation: pulse 0.6s ease-in-out;
+}
+
+/* ACCESSIBILITY FOCUS STYLES */
+.keyboard-navigation *:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.focused {
+  box-shadow: 0 0 0 3px var(--accent-light);
+}
+
+/* =============================================
    HOTELS GRID - MODERN UI/UX DESIGN
    ============================================= */
 .hotels-section {
   padding: 2.5rem 0;
-  background: linear-gradient(135deg, var(--bg-secondary) 0%, #f8fafc 100%);
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  transition: all var(--transition-normal);
+  min-height: 60vh;
 }
 
 .hotels-grid {
@@ -215,18 +406,24 @@ header .subtitle {
 
 .hotel-card {
   background: var(--bg-primary);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-lg);
+  transition: all var(--transition-slow);
   position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--border-light);
+  backdrop-filter: blur(10px);
 }
 
 .hotel-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 25px 50px rgba(0, 127, 173, 0.15);
   border-color: var(--accent);
+}
+
+.hotel-card:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
 }
 
 /* SEZIONE IMMAGINE */
@@ -445,12 +642,22 @@ header .subtitle {
     padding: 0.25rem 16px;
   }
   
-  header h1 {
-    font-size: 1rem;
+  .header-content {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
   }
   
-  header .subtitle {
-    font-size: 0.75rem;
+  .header-text {
+    text-align: center;
+  }
+  
+  .header-text h1 {
+    font-size: 1.25rem;
+  }
+  
+  .header-text .subtitle {
+    font-size: 0.85rem;
   }
   
   .filter-form {
@@ -491,12 +698,26 @@ header .subtitle {
     padding: 0.75rem 0;
   }
   
-  header h1 {
-    font-size: 1.25rem;
+  .header-text h1 {
+    font-size: 1.125rem;
   }
   
-  header .subtitle {
-    font-size: 0.85rem;
+  .header-text .subtitle {
+    font-size: 0.8rem;
+  }
+  
+  .theme-toggle {
+    width: 50px;
+    height: 28px;
+  }
+  
+  .theme-toggle::before {
+    width: 20px;
+    height: 20px;
+  }
+  
+  [data-theme="dark"] .theme-toggle::before {
+    transform: translateX(22px);
   }
   
   .hotels-grid {
@@ -521,4 +742,4 @@ header .subtitle {
   .hotel-rating {
     align-self: flex-end;
   }
-
+}

@@ -69,15 +69,39 @@ $filteredHotels = array_filter($hotels, function($hotel) use ($parking_requested
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hotel Directory</title>
+    <meta name="description" content="Directory professionale di hotel con filtri avanzati, dark mode e design moderno. Trova l'hotel perfetto per il tuo soggiorno.">
+    <meta name="keywords" content="hotel, prenotazioni, viaggi, turismo, directory hotel, booking">
+    <meta name="author" content="Fabio Bianco">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Hotel Directory - Portfolio Project">
+    <meta property="og:description" content="Progetto portfolio sviluppato con PHP, CSS moderno e JavaScript vanilla">
+    <meta property="og:type" content="website">
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#007fad">
+    <meta name="color-scheme" content="light dark">
+    
+    <title>Hotel Directory - Portfolio Project</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://images.unsplash.com">
 </head>
 
 <body>
     <header>
         <div class="container">
-            <h1>Hotel Directory</h1>
-            <p class="subtitle">Trova l'hotel perfetto per il tuo soggiorno</p>
+            <div class="header-content">
+                <div class="header-text">
+                    <h1>Hotel Directory</h1>
+                    <p class="subtitle">Trova l'hotel perfetto per il tuo soggiorno</p>
+                </div>
+                <div class="header-controls">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Cambia tema">
+                        <span class="theme-icon sun-icon">☀️</span>
+                        <span class="theme-icon moon-icon">🌙</span>
+                    </button>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -118,20 +142,24 @@ $filteredHotels = array_filter($hotels, function($hotel) use ($parking_requested
             <?php else: ?>
                 <div class="hotels-grid">
                     <?php foreach ($filteredHotels as $hotel): ?>
-                        <article class="hotel-card">
+                        <article class="hotel-card" role="article" tabindex="0" aria-labelledby="hotel-<?php echo $hotel['vote'] . '-' . str_replace(' ', '-', strtolower($hotel['name'])); ?>">
                             <div class="hotel-image">
-                                <img src="<?php echo $hotel['image']; ?>" alt="<?php echo htmlspecialchars($hotel['name']); ?>" loading="lazy">
-                                <div class="price-badge">€<?php echo $hotel['price']; ?>/notte</div>
+                                <img src="<?php echo $hotel['image']; ?>" 
+                                     alt="Immagine dell'hotel <?php echo htmlspecialchars($hotel['name']); ?>" 
+                                     loading="lazy"
+                                     width="400"
+                                     height="250">
+                                <div class="price-badge" aria-label="Prezzo per notte">€<?php echo $hotel['price']; ?>/notte</div>
                             </div>
                             
                             <div class="hotel-content">
                                 <div class="hotel-header">
-                                    <h2 class="hotel-name"><?php echo htmlspecialchars($hotel['name']); ?></h2>
-                                    <div class="hotel-rating">
-                                        <span class="rating-score"><?php echo $hotel['vote']; ?></span>
-                                        <div class="rating-stars">
+                                    <h2 class="hotel-name" id="hotel-<?php echo $hotel['vote'] . '-' . str_replace(' ', '-', strtolower($hotel['name'])); ?>"><?php echo htmlspecialchars($hotel['name']); ?></h2>
+                                    <div class="hotel-rating" aria-label="Valutazione hotel: <?php echo $hotel['vote']; ?> stelle su 5">
+                                        <span class="rating-score" aria-hidden="true"><?php echo $hotel['vote']; ?></span>
+                                        <div class="rating-stars" role="img" aria-label="<?php echo $hotel['vote']; ?> stelle su 5">
                                             <?php for ($i = 1; $i <= 5; $i++): ?>
-                                                <span class="star <?php echo $i <= $hotel['vote'] ? 'filled' : ''; ?>">★</span>
+                                                <span class="star <?php echo $i <= $hotel['vote'] ? 'filled' : ''; ?>" aria-hidden="true">★</span>
                                             <?php endfor; ?>
                                         </div>
                                     </div>
@@ -164,8 +192,12 @@ $filteredHotels = array_filter($hotels, function($hotel) use ($parking_requested
                                 </div>
                                 
                                 <div class="hotel-actions">
-                                    <button class="btn-view-details">Vedi dettagli</button>
-                                    <button class="btn-book">Prenota ora</button>
+                                    <button class="btn-view-details" aria-label="Vedi dettagli di <?php echo htmlspecialchars($hotel['name']); ?>">
+                                        Vedi dettagli
+                                    </button>
+                                    <button class="btn-book" aria-label="Prenota <?php echo htmlspecialchars($hotel['name']); ?>">
+                                        Prenota ora
+                                    </button>
                                 </div>
                             </div>
                         </article>
@@ -174,5 +206,141 @@ $filteredHotels = array_filter($hotels, function($hotel) use ($parking_requested
             <?php endif; ?>
         </div>
     </section>
+
+    <!-- LOADING OVERLAY -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p>Caricamento hotel...</p>
+    </div>
+
+    <script>
+        // ========================================
+        // DARK MODE SYSTEM
+        // ========================================
+        class ThemeManager {
+            constructor() {
+                this.theme = localStorage.getItem('theme') || 'light';
+                this.init();
+            }
+
+            init() {
+                this.applyTheme(this.theme);
+                this.setupToggle();
+            }
+
+            applyTheme(theme) {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                this.theme = theme;
+            }
+
+            toggleTheme() {
+                const newTheme = this.theme === 'light' ? 'dark' : 'light';
+                this.applyTheme(newTheme);
+            }
+
+            setupToggle() {
+                const toggle = document.getElementById('themeToggle');
+                if (toggle) {
+                    toggle.addEventListener('click', () => this.toggleTheme());
+                }
+            }
+        }
+
+        // ========================================
+        // ANIMAZIONI E PERFORMANCE
+        // ========================================
+        class AnimationManager {
+            constructor() {
+                this.setupScrollAnimations();
+                this.setupCardAnimations();
+                this.setupLoadingStates();
+            }
+
+            setupScrollAnimations() {
+                const cards = document.querySelectorAll('.hotel-card');
+                
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry, index) => {
+                        if (entry.isIntersecting) {
+                            setTimeout(() => {
+                                entry.target.classList.add('animate-in');
+                            }, index * 100); // Stagger effect
+                        }
+                    });
+                }, { threshold: 0.1 });
+
+                cards.forEach(card => observer.observe(card));
+            }
+
+            setupCardAnimations() {
+                const cards = document.querySelectorAll('.hotel-card');
+                
+                cards.forEach(card => {
+                    card.addEventListener('mouseenter', () => {
+                        card.classList.add('card-hover');
+                    });
+                    
+                    card.addEventListener('mouseleave', () => {
+                        card.classList.remove('card-hover');
+                    });
+                });
+            }
+
+            setupLoadingStates() {
+                // Simula loading iniziale
+                window.addEventListener('load', () => {
+                    setTimeout(() => {
+                        document.getElementById('loadingOverlay').classList.add('fade-out');
+                    }, 500);
+                });
+            }
+        }
+
+        // ========================================
+        // ACCESSIBILITY ENHANCEMENTS
+        // ========================================
+        class AccessibilityManager {
+            constructor() {
+                this.setupKeyboardNavigation();
+                this.setupFocusManagement();
+            }
+
+            setupKeyboardNavigation() {
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Tab') {
+                        document.body.classList.add('keyboard-navigation');
+                    }
+                });
+
+                document.addEventListener('mousedown', () => {
+                    document.body.classList.remove('keyboard-navigation');
+                });
+            }
+
+            setupFocusManagement() {
+                const focusableElements = document.querySelectorAll(
+                    'button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                );
+                
+                focusableElements.forEach(element => {
+                    element.addEventListener('focus', () => {
+                        element.classList.add('focused');
+                    });
+                    
+                    element.addEventListener('blur', () => {
+                        element.classList.remove('focused');
+                    });
+                });
+            }
+        }
+
+        // INIZIALIZZAZIONE
+        document.addEventListener('DOMContentLoaded', () => {
+            new ThemeManager();
+            new AnimationManager();
+            new AccessibilityManager();
+        });
+    </script>
 </body>
 </html>

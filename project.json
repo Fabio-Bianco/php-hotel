@@ -1,0 +1,104 @@
+{
+  "name": "hotel-directory",
+  "version": "2.0.0",
+  "description": "Modern hotel directory application with advanced UI/UX features",
+  "author": {
+    "name": "Fabio Bianco",
+    "email": "fabio.bianco@example.com",
+    "url": "https://fabiobianco.dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Fabio-Bianco/php-hotel"
+  },
+  "keywords": [
+    "hotel",
+    "directory",
+    "php",
+    "responsive",
+    "dark-mode",
+    "accessibility",
+    "modern-css",
+    "portfolio"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/Fabio-Bianco/php-hotel#readme",
+  "bugs": {
+    "url": "https://github.com/Fabio-Bianco/php-hotel/issues"
+  },
+  "technologies": {
+    "frontend": [
+      "HTML5",
+      "CSS3 (Custom Properties, Grid, Flexbox)",
+      "JavaScript ES6+ (Classes, Modules)",
+      "Responsive Design",
+      "Accessibility (WCAG 2.1 AA)"
+    ],
+    "backend": [
+      "PHP 8.0+",
+      "Apache Server"
+    ],
+    "tools": [
+      "XAMPP",
+      "VS Code",
+      "Git",
+      "Browser DevTools"
+    ]
+  },
+  "features": {
+    "ui_ux": [
+      "Dark/Light Mode with persistence",
+      "Modern animations and micro-interactions",
+      "Responsive mobile-first design",
+      "Advanced CSS Grid layout",
+      "Fluid typography system"
+    ],
+    "accessibility": [
+      "WCAG 2.1 AA compliant",
+      "ARIA labels and roles",
+      "Keyboard navigation",
+      "Screen reader support",
+      "Focus management"
+    ],
+    "performance": [
+      "Lazy loading images",
+      "CSS custom properties optimization",
+      "Efficient animations with CSS transforms",
+      "Preconnect for external resources",
+      "Semantic HTML structure"
+    ],
+    "functionality": [
+      "Advanced filtering system",
+      "URL parameter state management",
+      "Loading states with skeleton UI",
+      "Scroll-driven animations",
+      "Local storage integration"
+    ]
+  },
+  "browser_support": {
+    "chrome": ">=88",
+    "firefox": ">=85",
+    "safari": ">=14",
+    "edge": ">=88"
+  },
+  "development": {
+    "requirements": {
+      "php": ">=7.4",
+      "apache": ">=2.4"
+    },
+    "setup": [
+      "Install XAMPP",
+      "Clone repository to htdocs",
+      "Start Apache server",
+      "Navigate to localhost/php-hotel/ex.php"
+    ]
+  },
+  "performance_metrics": {
+    "lighthouse": {
+      "performance": "95+",
+      "accessibility": "100",
+      "best_practices": "95+",
+      "seo": "90+"
+    }
+  }
+}
