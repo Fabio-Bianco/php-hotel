@@ -1,5 +1,40 @@
 <?php
+// =============================================
+// HOTEL DIRECTORY - ENTERPRISE VERSION 2.0.0
+// =============================================
 
+// Error handling and security headers
+error_reporting(E_ALL);
+ini_set('display_errors', 0); // Hide in production
+ini_set('log_errors', 1);
+ini_set('error_log', 'logs/php_errors.log');
+
+// Security headers
+header('X-Content-Type-Options: nosniff');
+header('X-Frame-Options: DENY');
+header('X-XSS-Protection: 1; mode=block');
+header('Referrer-Policy: strict-origin-when-cross-origin');
+
+// Performance headers
+header('Cache-Control: public, max-age=3600');
+header('Vary: Accept-Encoding');
+
+// Helper functions for input validation (Junior-level approach)
+function sanitizeInput($input) {
+    return htmlspecialchars(trim($input), ENT_QUOTES, 'UTF-8');
+}
+
+function validateInteger($value, $min = null, $max = null) {
+    $int = filter_var($value, FILTER_VALIDATE_INT);
+    if ($int === false) return false;
+    
+    if ($min !== null && $int < $min) return false;
+    if ($max !== null && $int > $max) return false;
+    
+    return $int;
+}
+
+// Hotel data with validation
 $hotels = [
     [
         'name' => 'Hotel Belvedere',
@@ -48,18 +83,31 @@ $hotels = [
     ],
 ];
 
-// Filtri avanzati con UX migliorata
-$parking_requested = isset($_GET['parking']) && $_GET['parking'] == 'on';
-$min_vote = isset($_GET['minimum_vote']) && is_numeric($_GET['minimum_vote']) ? (int)$_GET['minimum_vote'] : 0;
+// Simple input handling with basic validation
+$parking_requested = isset($_GET['parking']) && $_GET['parking'] === 'on';
+$min_vote = validateInteger($_GET['minimum_vote'] ?? 1, 1, 5) ?: 1;
 
-// Logica di filtro migliorata
-$filteredHotels = array_filter($hotels, function($hotel) use ($parking_requested, $min_vote) {
-    $passParking = !$parking_requested || $hotel['parking'];
-    $passVote = $hotel['vote'] >= $min_vote;
-    return $passParking && $passVote;
-});
+// Filter hotels based on user input
+$filteredHotels = [];
+foreach ($hotels as $hotel) {
+    // Check parking requirement
+    if ($parking_requested && !$hotel['parking']) {
+        continue; // Skip this hotel
+    }
+    
+    // Check minimum rating
+    if ($hotel['vote'] < $min_vote) {
+        continue; // Skip this hotel
+    }
+    
+    // Hotel meets criteria, add to results
+    $filteredHotels[] = $hotel;
+}
 
-// Codice pulito e ottimizzato
+// Log for debugging (simple approach)
+if (empty($filteredHotels)) {
+    error_log("No hotels found with filters: parking=" . ($parking_requested ? 'yes' : 'no') . ", min_vote=" . $min_vote);
+}
 
 ?>
 
@@ -79,10 +127,27 @@ $filteredHotels = array_filter($hotels, function($hotel) use ($parking_requested
     <meta property="og:type" content="website">
     
     <!-- Theme Color -->
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com;
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                   img-src 'self' https://images.unsplash.com https://via.placeholder.com data:;
+                   font-src 'self' https://fonts.gstatic.com;
+                   connect-src 'self' https://www.google-analytics.com;
+                   object-src 'none';
+                   base-uri 'self';
+                   form-action 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
+    <!-- Theme & Performance -->
     <meta name="theme-color" content="#007fad">
     <meta name="color-scheme" content="light dark">
     
-    <title>Hotel Directory - Portfolio Project</title>
+    <title>Hotel Directory - Enterprise Portfolio Project</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://images.unsplash.com">
 </head>
@@ -393,12 +458,39 @@ $filteredHotels = array_filter($hotels, function($hotel) use ($parking_requested
             }
         }
 
-        // INIZIALIZZAZIONE
+        // ========================================
+        // BASIC PERFORMANCE TRACKING (Junior Level)
+        // ========================================
+        class SimplePerformance {
+            constructor() {
+                this.trackLoadTime();
+            }
+            
+            trackLoadTime() {
+                window.addEventListener('load', () => {
+                    const loadTime = performance.now();
+                    console.log(`🚀 Page loaded in ${Math.round(loadTime)}ms`);
+                    
+                    // Simple performance tips for future
+                    if (loadTime > 3000) {
+                        console.warn('⚠️ Page load time is slow. Consider optimizing images or scripts.');
+                    }
+                });
+            }
+        }
+
+        // INIZIALIZZAZIONE (Junior Developer Level)
         document.addEventListener('DOMContentLoaded', () => {
+            console.log('🏨 Hotel Directory v2.0.0 - Loading...');
+            
+            // Initialize core features
             new FiltersManager();
-            new ThemeManager();
+            new ThemeManager(); 
             new AnimationManager();
             new AccessibilityManager();
+            new SimplePerformance();
+            
+            console.log('✅ Hotel Directory - Ready!');
         });
     </script>
 </body>
