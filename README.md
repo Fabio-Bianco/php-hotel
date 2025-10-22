@@ -19,11 +19,12 @@
 ## ✨ Features
 
 ### 🎨 **UI/UX Design Moderno**
-- **Dark/Light Mode** con persistenza localStorage
-- **Animazioni fluide** e micro-interactions
-- **Design responsivo** mobile-first
-- **Gradients e shadows** avanzati
-- **Typography scale** professionale
+- **Dark/Light Mode** con persistenza localStorage e palette adattiva
+- **Sistema coloristico semantico** (ogni colore ha una funzione specifica)
+- **Animazioni fluide** e micro-interactions con cubic-bezier
+- **Design responsivo** mobile-first con container queries
+- **Gradients e shadows** stratificati per profondità
+- **Typography scale fluida** con clamp() per tutti i device
 
 ### 🚀 **Performance & Accessibilità**
 - **WCAG 2.1 AA compliant** con ARIA labels
@@ -33,11 +34,19 @@
 - **SEO optimized** con meta tags
 
 ### 🔧 **Funzionalità Avanzate**
-- **Sistema di filtri** intelligenti (voto, parcheggio)
-- **Gestione stato** con URL parameters
-- **Loading states** con skeleton UI
-- **Scroll-driven animations**
-- **Focus management** avanzato
+- **Sistema di filtri collassabili** (chiusi di default per UX pulita)
+- **Rating system ottimizzato** (stelle con semantica colorata)
+- **Gestione stato** con URL parameters e persistenza
+- **Loading states** con skeleton UI e transizioni fluide
+- **Scroll-driven animations** con stagger effects
+- **Focus management** avanzato per accessibilità
+
+### 🎯 **UX Improvements Strategiche**
+- **Filtri nascosti di default** = più spazio per contenuto
+- **Badge prezzo contrastanti** (verde/arancione vs blu dominante)  
+- **Stelle dorate su background viola** = focus immediato sul rating
+- **Pulsanti semantici** (verde per "prenota", blu per "dettagli")
+- **Card mobile ottimizzate** (25% spazio ridotto, leggibilità migliorata)
 
 ### 📱 **Responsive Design**
 - **Mobile-first approach**
@@ -174,23 +183,71 @@ class AnimationManager {
 
 ## 🎨 Design System
 
-### Color Palette
-```css
-/* Light Mode */
---accent: #007fad          /* Primary brand */
---success: #00a680         /* Success states */
---bg-primary: #ffffff      /* Cards, header */
---text-primary: #212529    /* Headings, important text */
+### 🌈 **Personalità Coloristica Professionale**
 
-/* Dark Mode */
---accent: #0ea5e9          /* Adjusted for dark bg */
---bg-primary: #0f172a      /* Dark cards */
---text-primary: #f1f5f9    /* Light text on dark */
+Il layout ha **personalità coloristica** mantenendo l'eleganza professionale. Ogni colore ha una **funzione semantica chiara**:
+
+- **🔵 BLU** (`#007fad`) - Brand identity, navigazione, fiducia
+- **🟢 VERDE** (`#10b981`) - Azioni positive, prezzo, disponibilità 
+- **🟡 ORO** (`#f59e0b`) - Valutazioni, stelle, premium features
+- **🟣 VIOLA** (`#8b5cf6`) - Informazioni, distanze, dati neutri
+- **🔴 ROSSO** (`#ef4444`) - Alert, non disponibilità, attenzione
+
+### Color Palette Semantica
+```css
+/* Light Mode - Colori Bilanciati */
+--accent: #007fad          /* Primary brand - BLU professionale */
+--success: #10b981         /* Success/CTA - VERDE azione */
+--warning: #f59e0b         /* Rating/Premium - ORO prestigio */
+--info: #8b5cf6           /* Info/Distance - VIOLA neutro */
+--danger: #ef4444         /* Error/Alert - ROSSO attenzione */
+
+--bg-primary: #ffffff      /* Cards pulite */
+--bg-secondary: #f8fafc    /* Background sfumato */
+--bg-accent: #fef7ff      /* Accento viola tenue */
+
+--text-primary: #1e293b    /* Testo principale contrastato */
+--text-secondary: #475569  /* Descrizioni leggibili */
+
+/* Dark Mode - Palette Adattata */
+--accent: #0ea5e9          /* BLU più luminoso per dark bg */
+--success: #34d399         /* VERDE vivace per contrasto */
+--warning: #fbbf24         /* ORO brillante su scuro */
+--bg-primary: #0f172a      /* Dark elegante */
+--text-primary: #f1f5f9    /* Testo chiaro su dark */
 ```
 
-### Typography Scale
+### 📐 **Design Methodology**
+
+**🎨 Color Psychology Applied:**
+- **Verde** per azioni positive → Psicologia del "via libera"
+- **Oro** per rating → Associazione con qualità premium  
+- **Blu** per brand → Fiducia e professionalità
+- **Viola** per info → Neutralità e modernità
+
+**✨ Visual Hierarchy Ottimizzata:**
 ```css
-/* Fluid Typography */
+/* Gerarchia Semantica */
+.price-badge {          /* VERDE - Massima attenzione */
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.rating-stars {         /* ORO su VIOLA - Focus rating */
+  background: linear-gradient(135deg, #fef7ff, #f3e8ff);
+}
+
+.btn-book {            /* VERDE - Call to Action */
+  background: linear-gradient(135deg, #10b981, #34d399);
+}
+
+.btn-view-details {    /* BLU - Azione secondaria */
+  border: 2px solid var(--accent);
+}
+```
+
+### Typography Scale Fluida
+```css
+/* Responsive Typography */
 --fs-xs: clamp(0.75rem, 0.5vw + 0.7rem, 0.875rem);
 --fs-sm: clamp(0.875rem, 0.5vw + 0.8rem, 1rem);
 --fs-base: clamp(1rem, 0.5vw + 0.9rem, 1.125rem);

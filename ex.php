@@ -107,28 +107,41 @@ $filteredHotels = array_filter($hotels, function($hotel) use ($parking_requested
 
     <section class="filters">
         <div class="container">
-            <form class="filter-form" method="GET">
-                <div class="filter-group">
-                    <label for="minimum_vote">Valutazione minima</label>
-                    <select name="minimum_vote" id="minimum_vote" class="filter-input">
-                        <option value="1" <?php echo $min_vote == 1 ? 'selected' : ''; ?>>1+</option>
-                        <option value="2" <?php echo $min_vote == 2 ? 'selected' : ''; ?>>2+</option>
-                        <option value="3" <?php echo $min_vote == 3 ? 'selected' : ''; ?>>3+</option>
-                        <option value="4" <?php echo $min_vote == 4 ? 'selected' : ''; ?>>4+</option>
-                        <option value="5" <?php echo $min_vote == 5 ? 'selected' : ''; ?>>5</option>
-                    </select>
-                </div>
-
-                <div class="checkbox-wrapper">
-                    <label>Servizi aggiuntivi</label>
-                    <div class="checkbox-group">
-                        <input type="checkbox" name="parking" id="parking" <?php echo $parking_requested ? 'checked' : ''; ?>>
-                        <label for="parking">Parcheggio disponibile</label>
+            <div class="filters-header">
+                <button type="button" class="filters-toggle" id="filtersToggle" aria-expanded="false" aria-controls="filterForm">
+                    <span class="filters-title">🔍 Filtri di ricerca</span>
+                    <span class="filters-count" id="filtersCount">(<?php echo ($parking_requested || $min_vote > 1) ? 'Attivi' : '0 attivi'; ?>)</span>
+                    <span class="toggle-icon">▼</span>
+                </button>
+            </div>
+            
+            <div class="filters-content" id="filterForm" aria-hidden="true">
+                <form class="filter-form" method="GET">
+                    <div class="filter-group">
+                        <label for="minimum_vote">Valutazione minima</label>
+                        <select name="minimum_vote" id="minimum_vote" class="filter-input">
+                            <option value="1" <?php echo $min_vote == 1 ? 'selected' : ''; ?>>1+</option>
+                            <option value="2" <?php echo $min_vote == 2 ? 'selected' : ''; ?>>2+</option>
+                            <option value="3" <?php echo $min_vote == 3 ? 'selected' : ''; ?>>3+</option>
+                            <option value="4" <?php echo $min_vote == 4 ? 'selected' : ''; ?>>4+</option>
+                            <option value="5" <?php echo $min_vote == 5 ? 'selected' : ''; ?>>5</option>
+                        </select>
                     </div>
-                </div>
 
-                <button type="submit" class="btn-filter">Cerca hotel</button>
-            </form>
+                    <div class="checkbox-wrapper">
+                        <label>Servizi aggiuntivi</label>
+                        <div class="checkbox-group">
+                            <input type="checkbox" name="parking" id="parking" <?php echo $parking_requested ? 'checked' : ''; ?>>
+                            <label for="parking">Parcheggio disponibile</label>
+                        </div>
+                    </div>
+
+                    <div class="filter-actions">
+                        <button type="submit" class="btn-filter">Cerca hotel</button>
+                        <button type="button" class="btn-reset" id="resetFilters">Reset</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </section>
 
@@ -156,7 +169,6 @@ $filteredHotels = array_filter($hotels, function($hotel) use ($parking_requested
                                 <div class="hotel-header">
                                     <h2 class="hotel-name" id="hotel-<?php echo $hotel['vote'] . '-' . str_replace(' ', '-', strtolower($hotel['name'])); ?>"><?php echo htmlspecialchars($hotel['name']); ?></h2>
                                     <div class="hotel-rating" aria-label="Valutazione hotel: <?php echo $hotel['vote']; ?> stelle su 5">
-                                        <span class="rating-score" aria-hidden="true"><?php echo $hotel['vote']; ?></span>
                                         <div class="rating-stars" role="img" aria-label="<?php echo $hotel['vote']; ?> stelle su 5">
                                             <?php for ($i = 1; $i <= 5; $i++): ?>
                                                 <span class="star <?php echo $i <= $hotel['vote'] ? 'filled' : ''; ?>" aria-hidden="true">★</span>
@@ -215,6 +227,66 @@ $filteredHotels = array_filter($hotels, function($hotel) use ($parking_requested
 
     <script>
         // ========================================
+        // FILTERS SYSTEM
+        // ========================================
+        class FiltersManager {
+            constructor() {
+                this.filtersToggle = document.getElementById('filtersToggle');
+                this.filtersContent = document.getElementById('filterForm');
+                this.resetButton = document.getElementById('resetFilters');
+                this.init();
+            }
+
+            init() {
+                this.setupToggle();
+                this.setupReset();
+                this.updateFiltersCount();
+            }
+
+            setupToggle() {
+                if (this.filtersToggle) {
+                    this.filtersToggle.addEventListener('click', () => {
+                        this.toggleFilters();
+                    });
+                }
+            }
+
+            toggleFilters() {
+                const isExpanded = this.filtersToggle.getAttribute('aria-expanded') === 'true';
+                
+                this.filtersToggle.setAttribute('aria-expanded', !isExpanded);
+                this.filtersContent.setAttribute('aria-hidden', isExpanded);
+                
+                if (!isExpanded) {
+                    this.filtersContent.classList.add('expanded');
+                } else {
+                    this.filtersContent.classList.remove('expanded');
+                }
+            }
+
+            setupReset() {
+                if (this.resetButton) {
+                    this.resetButton.addEventListener('click', () => {
+                        window.location.href = window.location.pathname;
+                    });
+                }
+            }
+
+            updateFiltersCount() {
+                // Auto-expand if filters are active
+                const urlParams = new URLSearchParams(window.location.search);
+                const hasActiveFilters = urlParams.has('parking') || 
+                                       (urlParams.has('minimum_vote') && urlParams.get('minimum_vote') !== '1');
+                
+                if (hasActiveFilters) {
+                    this.filtersToggle.setAttribute('aria-expanded', 'true');
+                    this.filtersContent.setAttribute('aria-hidden', 'false');
+                    this.filtersContent.classList.add('expanded');
+                }
+            }
+        }
+
+        // ========================================
         // DARK MODE SYSTEM
         // ========================================
         class ThemeManager {
@@ -253,7 +325,6 @@ $filteredHotels = array_filter($hotels, function($hotel) use ($parking_requested
         class AnimationManager {
             constructor() {
                 this.setupScrollAnimations();
-                this.setupCardAnimations();
                 this.setupLoadingStates();
             }
 
@@ -273,19 +344,7 @@ $filteredHotels = array_filter($hotels, function($hotel) use ($parking_requested
                 cards.forEach(card => observer.observe(card));
             }
 
-            setupCardAnimations() {
-                const cards = document.querySelectorAll('.hotel-card');
-                
-                cards.forEach(card => {
-                    card.addEventListener('mouseenter', () => {
-                        card.classList.add('card-hover');
-                    });
-                    
-                    card.addEventListener('mouseleave', () => {
-                        card.classList.remove('card-hover');
-                    });
-                });
-            }
+            // Card hover animations rimossi per design più pulito
 
             setupLoadingStates() {
                 // Simula loading iniziale
@@ -337,6 +396,7 @@ $filteredHotels = array_filter($hotels, function($hotel) use ($parking_requested
 
         // INIZIALIZZAZIONE
         document.addEventListener('DOMContentLoaded', () => {
+            new FiltersManager();
             new ThemeManager();
             new AnimationManager();
             new AccessibilityManager();
