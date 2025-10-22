@@ -59,18 +59,7 @@ $filteredHotels = array_filter($hotels, function($hotel) use ($parking_requested
     return $passParking && $passVote;
 });
 
-// Funzione per generare stelle
-function generateStars($rating) {
-    $stars = '';
-    for ($i = 1; $i <= 5; $i++) {
-        if ($i <= $rating) {
-            $stars .= '<i class="star-filled">★</i>';
-        } else {
-            $stars .= '<i class="star-empty">☆</i>';
-        }
-    }
-    return $stars;
-}
+// Codice pulito e ottimizzato
 
 ?>
 
@@ -80,196 +69,110 @@ function generateStars($rating) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Trova e confronta i migliori hotel con filtri avanzati">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <title>Hotel Directory</title>
     <link rel="stylesheet" href="style.css">
-    <title>🏨 HotelFinder - Trova il tuo hotel perfetto</title>
 </head>
+
 <body>
-    <!-- Header con gradiente moderno -->
-    <header class="hero-section">
+    <header>
         <div class="container">
-            <div class="row align-items-center min-vh-50">
-                <div class="col-12 text-center text-white">
-                    <h1 class="display-4 fw-bold mb-3 animate-fade-in">
-                        🏨 HotelFinder
-                    </h1>
-                    <p class="lead mb-4 animate-slide-up">
-                        Scopri l'hotel perfetto per il tuo prossimo viaggio
-                    </p>
-                </div>
-            </div>
+            <h1>Hotel Directory</h1>
+            <p class="subtitle">Trova l'hotel perfetto per il tuo soggiorno</p>
         </div>
     </header>
 
-    <!-- Filtri con design moderno -->
-    <section class="filters-section py-5">
+    <section class="filters">
         <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-10">
-                    <div class="filter-card">
-                        <div class="row align-items-center">
-                            <div class="col-12">
-                                <h3 class="h5 mb-4 d-flex align-items-center">
-                                    <i class="bi bi-funnel-fill me-2 text-primary"></i>
-                                    Personalizza la tua ricerca
-                                </h3>
-                            </div>
-                        </div>
-                        
-                        <form method="GET" action="" class="filter-form">
-                            <div class="row g-4">
-                                <div class="col-md-6">
-                                    <div class="form-floating">
-                                        <select class="form-select" id="minimum_vote" name="minimum_vote">
-                                            <option value="0" <?php echo $min_vote == 0 ? 'selected' : ''; ?>>Tutte le valutazioni</option>
-                                            <option value="1" <?php echo $min_vote == 1 ? 'selected' : ''; ?>>⭐ 1+ stelle</option>
-                                            <option value="2" <?php echo $min_vote == 2 ? 'selected' : ''; ?>>⭐⭐ 2+ stelle</option>
-                                            <option value="3" <?php echo $min_vote == 3 ? 'selected' : ''; ?>>⭐⭐⭐ 3+ stelle</option>
-                                            <option value="4" <?php echo $min_vote == 4 ? 'selected' : ''; ?>>⭐⭐⭐⭐ 4+ stelle</option>
-                                            <option value="5" <?php echo $min_vote == 5 ? 'selected' : ''; ?>>⭐⭐⭐⭐⭐ 5 stelle</option>
-                                        </select>
-                                        <label for="minimum_vote">Valutazione minima</label>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-md-4">
-                                    <div class="form-check form-switch parking-switch">
-                                        <input class="form-check-input" type="checkbox" id="parking" name="parking" value="on" 
-                                               <?php echo $parking_requested ? 'checked' : ''; ?>>
-                                        <label class="form-check-label d-flex align-items-center" for="parking">
-                                            <i class="bi bi-car-front-fill me-2"></i>
-                                            Solo con parcheggio
-                                        </label>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-md-2">
-                                    <button type="submit" class="btn btn-primary btn-search w-100 h-100">
-                                        <i class="bi bi-search me-1"></i>
-                                        Cerca
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                        
-                        <!-- Status filtri attivi -->
-                        <?php if($parking_requested || $min_vote > 0): ?>
-                        <div class="active-filters mt-3">
-                            <small class="text-muted">Filtri attivi:</small>
-                            <?php if($parking_requested): ?>
-                                <span class="badge bg-info ms-2">
-                                    <i class="bi bi-car-front-fill me-1"></i>Parcheggio
-                                </span>
-                            <?php endif; ?>
-                            <?php if($min_vote > 0): ?>
-                                <span class="badge bg-warning text-dark ms-2">
-                                    <i class="bi bi-star-fill me-1"></i><?php echo $min_vote; ?>+ stelle
-                                </span>
-                            <?php endif; ?>
-                            <a href="?" class="btn btn-sm btn-outline-secondary ms-2">
-                                <i class="bi bi-x-lg me-1"></i>Rimuovi filtri
-                            </a>
-                        </div>
-                        <?php endif; ?>
+            <form class="filter-form" method="GET">
+                <div class="filter-group">
+                    <label for="minimum_vote">Valutazione minima</label>
+                    <select name="minimum_vote" id="minimum_vote" class="filter-input">
+                        <option value="1" <?php echo $min_vote == 1 ? 'selected' : ''; ?>>1+</option>
+                        <option value="2" <?php echo $min_vote == 2 ? 'selected' : ''; ?>>2+</option>
+                        <option value="3" <?php echo $min_vote == 3 ? 'selected' : ''; ?>>3+</option>
+                        <option value="4" <?php echo $min_vote == 4 ? 'selected' : ''; ?>>4+</option>
+                        <option value="5" <?php echo $min_vote == 5 ? 'selected' : ''; ?>>5</option>
+                    </select>
+                </div>
+
+                <div class="checkbox-wrapper">
+                    <label>Servizi aggiuntivi</label>
+                    <div class="checkbox-group">
+                        <input type="checkbox" name="parking" id="parking" <?php echo $parking_requested ? 'checked' : ''; ?>>
+                        <label for="parking">Parcheggio disponibile</label>
                     </div>
                 </div>
-            </div>
+
+                <button type="submit" class="btn-filter">Cerca hotel</button>
+            </form>
         </div>
     </section>
 
-    <!-- Risultati in formato card moderno -->
-    <section class="results-section py-5">
+    <section class="hotels-section">
         <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h2 class="h4 mb-0">
-                            <i class="bi bi-buildings me-2 text-primary"></i>
-                            Hotel disponibili 
-                            <span class="badge bg-primary"><?php echo count($filteredHotels); ?></span>
-                        </h2>
-                    </div>
+            <?php if (empty($filteredHotels)): ?>
+                <div class="empty-state">
+                    <h3>Nessun hotel trovato</h3>
+                    <p>Prova a modificare i filtri di ricerca</p>
                 </div>
-            </div>
-            
-            <div class="row g-4">
-                <?php foreach ($filteredHotels as $index => $hotel): ?>
-                <div class="col-lg-6 col-xl-4">
-                    <div class="hotel-card" style="animation-delay: <?php echo $index * 0.1; ?>s">
-                        <div class="hotel-image">
-                            <img src="<?php echo $hotel['image']; ?>" alt="<?php echo $hotel['name']; ?>" class="card-img-top">
-                            <div class="hotel-badge">
-                                <div class="rating-badge">
-                                    <?php echo generateStars($hotel['vote']); ?>
-                                    <small class="ms-1"><?php echo $hotel['vote']; ?>/5</small>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold"><?php echo $hotel['name']; ?></h5>
-                            <p class="card-text text-muted mb-3"><?php echo $hotel['description']; ?></p>
-                            
-                            <div class="hotel-features mb-3">
-                                <div class="feature">
-                                    <i class="bi bi-geo-alt-fill text-primary me-2"></i>
-                                    <span><?php echo $hotel['distance_to_center']; ?> km dal centro</span>
-                                </div>
-                                <div class="feature">
-                                    <?php if($hotel['parking']): ?>
-                                        <i class="bi bi-car-front-fill text-success me-2"></i>
-                                        <span class="text-success">Parcheggio disponibile</span>
-                                    <?php else: ?>
-                                        <i class="bi bi-x-circle-fill text-danger me-2"></i>
-                                        <span class="text-muted">Parcheggio non disponibile</span>
-                                    <?php endif; ?>
-                                </div>
+            <?php else: ?>
+                <div class="hotels-grid">
+                    <?php foreach ($filteredHotels as $hotel): ?>
+                        <article class="hotel-card">
+                            <div class="hotel-image">
+                                <img src="<?php echo $hotel['image']; ?>" alt="<?php echo htmlspecialchars($hotel['name']); ?>" loading="lazy">
+                                <div class="price-badge">€<?php echo $hotel['price']; ?>/notte</div>
                             </div>
                             
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="price">
-                                    <span class="h5 fw-bold text-primary mb-0">€<?php echo $hotel['price']; ?></span>
-                                    <small class="text-muted">/notte</small>
+                            <div class="hotel-content">
+                                <div class="hotel-header">
+                                    <h2 class="hotel-name"><?php echo htmlspecialchars($hotel['name']); ?></h2>
+                                    <div class="hotel-rating">
+                                        <span class="rating-score"><?php echo $hotel['vote']; ?></span>
+                                        <div class="rating-stars">
+                                            <?php for ($i = 1; $i <= 5; $i++): ?>
+                                                <span class="star <?php echo $i <= $hotel['vote'] ? 'filled' : ''; ?>">★</span>
+                                            <?php endfor; ?>
+                                        </div>
+                                    </div>
                                 </div>
-                                <button class="btn btn-outline-primary btn-sm">
-                                    <i class="bi bi-eye me-1"></i>Dettagli
-                                </button>
+                                
+                                <p class="hotel-description">
+                                    <?php echo htmlspecialchars($hotel['description']); ?>
+                                </p>
+                                
+                                <div class="hotel-features">
+                                    <div class="feature-item">
+                                        <span class="feature-icon">🅿️</span>
+                                        <div class="feature-content">
+                                            <span class="feature-label">Parcheggio</span>
+                                            <span class="feature-value <?php echo $hotel['parking'] ? 'parking-yes' : 'parking-no'; ?>">
+                                                <?php echo $hotel['parking'] ? 'Disponibile' : 'Non disponibile'; ?>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="feature-item">
+                                        <span class="feature-icon">📍</span>
+                                        <div class="feature-content">
+                                            <span class="feature-label">Distanza centro</span>
+                                            <span class="feature-value distance-value">
+                                                <?php echo number_format($hotel['distance_to_center'], 1, ',', '.'); ?> km
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="hotel-actions">
+                                    <button class="btn-view-details">Vedi dettagli</button>
+                                    <button class="btn-book">Prenota ora</button>
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                        </article>
+                    <?php endforeach; ?>
                 </div>
-                <?php endforeach; ?>
-                
-                <?php if(empty($filteredHotels)): ?>
-                <div class="col-12">
-                    <div class="empty-state text-center py-5">
-                        <i class="bi bi-search display-1 text-muted mb-3"></i>
-                        <h3 class="text-muted">Nessun hotel trovato</h3>
-                        <p class="text-muted">Prova a modificare i filtri di ricerca</p>
-                        <a href="?" class="btn btn-primary">
-                            <i class="bi bi-arrow-clockwise me-1"></i>Rimuovi filtri
-                        </a>
-                    </div>
-                </div>
-                <?php endif; ?>
-            </div>
+            <?php endif; ?>
         </div>
     </section>
-
-    <!-- Footer moderno -->
-    <footer class="bg-dark text-light py-4 mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center">
-                    <p class="mb-0">&copy; 2025 HotelFinder. Progetto portfolio sviluppato con PHP e Bootstrap 5</p>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>
