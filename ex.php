@@ -92,7 +92,7 @@ $filteredHotels = array_filter($hotels, function($hotel) use ($parking_requested
         <div class="container">
             <div class="header-content">
                 <div class="header-text">
-                    <h1>Hotel Directory</h1>
+                    <h1>Hotel Scanner</h1>
                     <p class="subtitle">Trova l'hotel perfetto per il tuo soggiorno</p>
                 </div>
                 <div class="header-controls">
@@ -110,7 +110,6 @@ $filteredHotels = array_filter($hotels, function($hotel) use ($parking_requested
             <div class="filters-header">
                 <button type="button" class="filters-toggle" id="filtersToggle" aria-expanded="false" aria-controls="filterForm">
                     <span class="filters-title">🔍 Filtri di ricerca</span>
-                    <span class="filters-count" id="filtersCount">(<?php echo ($parking_requested || $min_vote > 1) ? 'Attivi' : '0 attivi'; ?>)</span>
                     <span class="toggle-icon">▼</span>
                 </button>
             </div>
