@@ -1,0 +1,388 @@
+/* 🎨 HotelFinder - Modern UX/UI Design 2025 */
+
+/* =============================================
+   VARIABILI CSS PERSONALIZZATE (Design System)
+   ============================================= */
+:root {
+  --primary-color: #2563eb;
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --secondary-color: #64748b;
+  --accent-color: #f59e0b;
+  --success-color: #10b981;
+  --danger-color: #ef4444;
+  --warning-color: #f59e0b;
+  
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-card: #ffffff;
+  
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  
+  --border-radius: 12px;
+  --border-radius-lg: 20px;
+  --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --box-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* =============================================
+   RESET E BASE STYLES
+   ============================================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background-color: var(--bg-secondary);
+  scroll-behavior: smooth;
+}
+
+/* =============================================
+   HERO SECTION - IMPATTO VISIVO MODERNO
+   ============================================= */
+.hero-section {
+  background: var(--primary-gradient);
+  position: relative;
+  overflow: hidden;
+  min-height: 50vh;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="rgba(255,255,255,0.1)"><polygon points="1000,100 1000,0 0,100"/></svg>') no-repeat bottom;
+  background-size: cover;
+}
+
+.hero-section .container {
+  position: relative;
+  z-index: 2;
+}
+
+/* =============================================
+   ANIMAZIONI MODERNE
+   ============================================= */
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(30px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 1s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 1s ease-out 0.3s both;
+}
+
+/* =============================================
+   SEZIONE FILTRI - UX OTTIMIZZATA
+   ============================================= */
+.filters-section {
+  background: var(--bg-primary);
+  margin-top: -50px;
+  position: relative;
+  z-index: 3;
+}
+
+.filter-card {
+  background: var(--bg-card);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow-lg);
+  padding: 2rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: var(--transition);
+}
+
+.filter-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Form Elements Moderni */
+.form-floating > .form-select {
+  border: 2px solid #e2e8f0;
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.form-floating > .form-select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Switch Personalizzato */
+.parking-switch {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.parking-switch:hover {
+  background: #e2e8f0;
+}
+
+.form-check-input:checked {
+  background-color: var(--success-color);
+  border-color: var(--success-color);
+}
+
+/* Bottone Ricerca Migliorato */
+.btn-search {
+  background: var(--primary-gradient);
+  border: none;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-search::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-search:hover::before {
+  left: 100%;
+}
+
+.btn-search:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+}
+
+/* Active Filters */
+.active-filters {
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius);
+  border-left: 4px solid var(--primary-color);
+}
+
+/* =============================================
+   HOTEL CARDS - DESIGN PREMIUM
+   ============================================= */
+.hotel-card {
+  background: var(--bg-card);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  height: 100%;
+  animation: fadeIn 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.hotel-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--box-shadow-lg);
+}
+
+.hotel-image {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.hotel-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--transition);
+}
+
+.hotel-card:hover .hotel-image img {
+  transform: scale(1.05);
+}
+
+.hotel-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+}
+
+.rating-badge {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 0.5rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  box-shadow: var(--box-shadow);
+}
+
+/* Stelle dinamiche */
+.star-filled {
+  color: var(--warning-color);
+  font-size: 0.875rem;
+}
+
+.star-empty {
+  color: #d1d5db;
+  font-size: 0.875rem;
+}
+
+/* Card Body */
+.hotel-card .card-body {
+  padding: 1.5rem;
+}
+
+.hotel-card .card-title {
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+}
+
+.hotel-card .card-text {
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Features List */
+.hotel-features {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.feature i {
+  font-size: 1rem;
+}
+
+/* Pricing */
+.price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+/* =============================================
+   EMPTY STATE - UX DESIGN
+   ============================================= */
+.empty-state {
+  padding: 4rem 2rem;
+}
+
+.empty-state i {
+  opacity: 0.3;
+}
+
+/* =============================================
+   RESPONSIVE DESIGN - MOBILE FIRST
+   ============================================= */
+@media (max-width: 768px) {
+  .hero-section {
+    min-height: 40vh;
+    text-align: center;
+  }
+  
+  .hero-section h1 {
+    font-size: 2.5rem;
+  }
+  
+  .filter-card {
+    padding: 1.5rem;
+    margin: 0 1rem;
+  }
+  
+  .parking-switch {
+    margin-top: 1rem;
+    justify-content: center;
+  }
+  
+  .hotel-features {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-section h1 {
+    font-size: 2rem;
+  }
+  
+  .filter-card {
+    padding: 1rem;
+  }
+  
+  .btn-search {
+    margin-top: 1rem;
+  }
+}
+
+/* =============================================
+   ACCESSIBILITY - A11Y IMPROVEMENTS
+   ============================================= */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus states migliorati */
+.btn:focus,
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .hotel-card {
+    border: 2px solid var(--text-primary);
+  }
+  
+  .btn-primary {
+    border: 2px solid var(--primary-color);
+  }
+}
